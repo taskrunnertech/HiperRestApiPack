@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Farshid Mirza</Authors>
+    <Company>Task Runner Technology</Company>
+    <PackageProjectUrl>http://taskrunnertech.co.uk</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/taskrunnertech/HiperRestApiPack</RepositoryUrl>
+    <Description>Rest Api Helper, Select special fields and Paging Extension for mongoDb</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HiperRestApiPack" Version="1.0.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
+  </ItemGroup>
+
+</Project>
