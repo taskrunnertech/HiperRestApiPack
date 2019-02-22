@@ -18,6 +18,7 @@ namespace HiperRestApiPack
         bool HasPreviousPage { get; }
 
         bool HasNextPage { get; }
+        decimal? Sum { get; }
     }
 
     public class Page<T> : IPage<T>
@@ -52,5 +53,7 @@ namespace HiperRestApiPack
         public bool HasNextPage { get; }
 
         public static IPage<T> Empty => new Page<T>(Enumerable.Empty<T>(), 0, 0, 0);
+
+        public decimal? Sum { get; }
     }
 }
