@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Farshid Mirza</Authors>
+    <Company>Task Runner Technology</Company>
+    <PackageProjectUrl>http://taskrunnertech.co.uk</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/taskrunnertech/HiperRestApiPack</RepositoryUrl>
+    <Description>Rest Api Helper, Select special fields and Paging Extension for Entity Framework</Description>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
