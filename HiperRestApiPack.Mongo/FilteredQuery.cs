@@ -80,7 +80,7 @@ namespace HiperRestApiPack.Mongo
                 Expression.New(dynamicType.GetConstructor(Type.EmptyTypes)), bindings), sourceItem);
 
             return source.Provider.CreateQuery(Expression.Call(typeof(Queryable), "Select", new Type[] { source.ElementType, dynamicType },
-                         Expression.Constant(source), selector));
+                         source.Expression, Expression.Quote(selector)));
         }
 
        
