@@ -8,56 +8,42 @@ namespace HiperRestApiPack
         /// <summary>
         /// Ascending sort
         /// </summary>
-        [EnumMember(Value = "asc")]
         Asc,
 
         /// <summary>
         /// Descending sort
         /// </summary>
-        [EnumMember(Value = "desc")]
         Desc
     }
     public class PagedRequest
     {
         /// <summary>
+        /// List of selected fields ( comma separated )
+        /// </summary>
+        public string Select { get; set; }
+
+        /// <summary>
         /// Page to fetch
         /// </summary>
-        public int? Page { get; set; }
+        public int Page { get; set; } = 1;
 
         /// <summary>
         /// Size of page to fetch
         /// Default is 20
         /// </summary>
-        public int PageSize { get; set; } = 20;
+        public int PageSize { get; set; } = 10;
 
-        private OrderType? _order;
-
-        /// <summary>
-        /// Sort order type ascending or descending
-        /// </summary>
-        public OrderType? Order
-        {
-            get
-            {
-                if (!_order.HasValue && !String.IsNullOrWhiteSpace(OrderBy))
-                {
-                    throw new PagingException($"You need to supply Order (asc or desc) in order to order collection by {OrderBy}.");
-                }
-
-                if (_order.HasValue && String.IsNullOrWhiteSpace(OrderBy))
-                {
-                    throw new PagingException($"You need to supply OrderBy field in order to order collection {_order.Value.ToString().ToLowerInvariant()}.");
-                }
-
-                return _order;
-            }
-            set { _order = value; }
-        }
+        public OrderType Order { get; set; } = OrderType.Asc;
 
         /// <summary>
         /// Field name to sort   
         /// </summary>
         public string OrderBy { get; set; }
+
+        /// <summary>
+        /// Full text search
+        /// </summary>
+        public string Search { get; set; }
     }
 
     public class PagingException : Exception

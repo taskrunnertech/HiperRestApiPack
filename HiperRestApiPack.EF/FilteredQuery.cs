@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver;
-using MongoDB.Driver.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,57 +6,49 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-
-namespace HiperRestApiPack.Mongo
+namespace HiperRestApiPack.EF
 {
-
-    public class FilteredMongoQuery : IFilteredQuery
+    public class FilteredEfQuery : IFilteredQuery
     {
-
         public async Task<object> FirstOrDefault<TSource>(IQueryable<TSource> query, PagedRequest request)
         {
-            IMongoQueryable<TSource> q = query as IMongoQueryable<TSource>;
-
             if (!string.IsNullOrEmpty(request.Select))
             {
-                var selectedFieldQuery = SelectDynamic(q, request.Select.Split(","));
-                return (selectedFieldQuery as IMongoQueryable).GetEnumerator().Current;
+                var selectedFieldQuery = SelectDynamic(query, request.Select.Split(","));
+                return selectedFieldQuery.GetEnumerator().Current;
             }
             else
             {
-                return await q.FirstOrDefaultAsync();
+               return await query.FirstOrDefaultAsync();
             }
         }
 
         public async Task<Page> ToPageList<TSource>(IQueryable<TSource> query, PagedRequest request)
         {
-            IMongoQueryable<TSource> q = query as IMongoQueryable<TSource>;
-             var tempQuery = Order(q, request)
+            var tempQuery = Order(query, request)
                 .Skip((request.Page - 1) * request.PageSize)
-                .Take(request.PageSize) as IMongoQueryable<TSource>;
-              
+                .Take(request.PageSize);
             if (!string.IsNullOrEmpty(request.Select))
             {
                 var selectedFieldQuery = SelectDynamic(tempQuery, request.Select.Split(","));
-                return new Page(selectedFieldQuery, request.Page, request.PageSize, await q.CountAsync());
+                return new Page(selectedFieldQuery, request.Page, request.PageSize, await query.CountAsync());
             }
             else
             {
                 var result = await tempQuery.ToListAsync();
-                return new Page(result, request.Page, request.PageSize, await q.CountAsync());
+                return new Page(result, request.Page, request.PageSize, await query.CountAsync());
             }
         }
 
         public async Task<Page> ToPageList<TSource, TResult>(IQueryable<TSource> query, PagedRequest request, Func<TSource, TResult> mapper) where TResult : class, new()
         {
-            IMongoQueryable<TSource> q = query as IMongoQueryable<TSource>;
-            var history = await (Order(q, request) as IMongoQueryable<TSource>)
+            var history = await Order(query, request)
               .Skip((request.Page - 1) * request.PageSize)
               .Take(request.PageSize).ToListAsync();
             var result = history.Select(x => mapper(x)).ToList();
-            return new Page(result, request.Page, request.PageSize, await q.CountAsync());
-        }
-
+            return new Page(result, request.Page, request.PageSize, await query.CountAsync());
+        } 
+        
         public IQueryable<TSource> Order<TSource>(IQueryable<TSource> query, PagedRequest request)
         {
             if (string.IsNullOrEmpty(request.OrderBy))
@@ -82,7 +73,5 @@ namespace HiperRestApiPack.Mongo
             return source.Provider.CreateQuery(Expression.Call(typeof(Queryable), "Select", new Type[] { source.ElementType, dynamicType },
                          Expression.Constant(source), selector));
         }
-
-       
     }
 }

@@ -1,82 +1,39 @@
-﻿using Platform.API.Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HiperRestApiPackSample.Models
 {
-    public class Model
+    public class Product
     {
-        public int Field1 { get; set; }
-        public int Field2 { get; set; }
-        public int Field3 { get; set; }
-        public List<Item> Items { get; set; }
-
-    }
-    public class Item
-    {
-        public int Field1 { get; set; }
-        public int Field2 { get; set; }
-        public int Field3 { get; set; }
-    }
-
-    public class Group : ModelBase
-    {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string MasterId { get; set; } = null;
-        public string CompanyId { get; set; }
-        public int Credit { get; set; }
-        public bool CanFutureTrading { get; set; }
-        public bool CanTrade { get; set; } = false;
-        public int MaxHistory { get; set; }
-        public string Message { get; set; }
-        public Dictionary<string, GroupSymbol> GroupSymbols { get; set; }
-    }
+        public decimal Price { get; set; }
 
-    public class GroupSymbol
+        public List<Variant> Variants { get; set; }
+
+    }
+    public class Variant
     {
-        public string Name { get; set; }
-        public int FutureLimit { get; set; }
-        public Markup Markup { get; set; } = new Markup();
-        public NextTreeDays NextTreeDays { get; set; } = new NextTreeDays();
-        public double LongSwap { get; set; }
-        public double ShortSwap { get; set; }
-        public int? MinVolume { get; set; }
-        public int? MaxVolume { get; set; }
-
-        public List<SpecialDay> SpecialDays { get; set; } = null;
-        public int? MinimumSpread { get; set; } = null; //Maximum Spread (in Points)
-        public int? MaximumSpread { get; set; } = null; //Maximum Spread (in Points)
-        public int? MaximumDeviation { get; set; } = null; //Maximum Deviation (in Points)
-        public string Collection { get; set; } = "Market Watch";
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
     }
 
-    public class NextTreeDays
+    public class Order
     {
-        public double T1BidSpread { get; set; }
-        public double T1AskSpread { get; set; }
-        public double T2BidSpread { get; set; }
-        public double T2AskSpread { get; set; }
-        public double T3BidSpread { get; set; }
-        public double T7AskSpread { get; set; }
-        public double T7BidSpread { get; set; }
-        public double T30AskSpread { get; set; }
-        public double T30BidSpread { get; set; }
-        public double T3AskSpread { get; set; }
+        public int Id { get; set; }
+        public DateTime OrderDate { get; set; }
+        public string CustomerName { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
     }
 
-    public class SpecialDay
+    public class OrderItem
     {
-        public DateTime Date { get; set; } = DateTime.Now.Date;
-        public Markup Markup { get; set; }
-        public bool CanTradeLong { get; set; }
-        public bool CanTradeShort { get; set; }
+        public int Id { get; set; }
+        public int VariantId { get; set; }
+        public int Quantity { get; set; }
+        public Variant Variant { get; set; }
     }
 
-    public class Markup
-    {
-        public int Markup_ask { get; set; }
-        public int Markup_bid { get; set; }
-    }
 }

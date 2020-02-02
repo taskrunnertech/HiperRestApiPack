@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace HiperRestApiPack
 {
-    public interface IPage<T>
+    public interface IPage
     {
-        List<T> Items { get; }
+        object Items { get; }
 
         int Index { get; }
 
@@ -21,30 +21,20 @@ namespace HiperRestApiPack
         decimal? Sum { get; }
     }
 
-    public class Page<T> : IPage<T>
+    public class Page : IPage
     {
-        public Page(IEnumerable<T> items, int pageIndex, int pageSize, int totalItemCount)
+        public Page(object items, int pageIndex, int pageSize, int totalItemCount)
         {
-            Items = items.ToList();
-            Index = pageIndex;
-            Size = pageSize;
-            TotalCount = totalItemCount;
-
-            if (Size > 0)
-            {
-                TotalPages = TotalCount / Size;
-
-                if (TotalCount % Size > 0)
-                {
-                    TotalPages++;
-                }
-            }
-
-            HasPreviousPage = Index > 1;
-            HasNextPage = Index < TotalPages;
+            this.Items = items;
+            this.Index = pageIndex;
+            this.Size = pageSize;
+            this.TotalCount = totalItemCount;
+            this.TotalPages = (totalItemCount / pageSize) + 1;
+            this.HasNextPage = pageIndex < this.TotalPages;
+            this.HasPreviousPage = pageIndex > 1;
         }
 
-        public List<T> Items { get; }
+        public object Items { get; }
         public int Index { get; }
         public int Size { get; }
         public int TotalCount { get; }
@@ -52,7 +42,7 @@ namespace HiperRestApiPack
         public bool HasPreviousPage { get; }
         public bool HasNextPage { get; }
 
-        public static IPage<T> Empty => new Page<T>(Enumerable.Empty<T>(), 0, 0, 0);
+        public static IPage Empty => new Page(Enumerable.Empty<object>(), 0, 0, 0);
 
         public decimal? Sum { get; }
     }
