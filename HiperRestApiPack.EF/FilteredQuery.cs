@@ -15,7 +15,9 @@ namespace HiperRestApiPack.EF
             if (!string.IsNullOrEmpty(request.Select))
             {
                 var selectedFieldQuery = SelectDynamic(query, request.Select.Split(","));
-                return selectedFieldQuery.GetEnumerator().Current;
+                var n = selectedFieldQuery.GetEnumerator();
+                n.MoveNext();
+                return n.Current;
             }
             else
             {

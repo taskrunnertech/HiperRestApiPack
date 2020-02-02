@@ -21,7 +21,9 @@ namespace HiperRestApiPack.Mongo
             if (!string.IsNullOrEmpty(request.Select))
             {
                 var selectedFieldQuery = SelectDynamic(q, request.Select.Split(","));
-                return (selectedFieldQuery as IMongoQueryable).GetEnumerator().Current;
+                var n = (selectedFieldQuery as IMongoQueryable).GetEnumerator();
+                n.MoveNext();
+                return n.Current;
             }
             else
             {
