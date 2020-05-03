@@ -1,6 +1,15 @@
 # HiperRestApiPack
 Rest Api Helper, Select special fields, Paging
 
+# Install
+For using with entity framework
+```
+Install-Package HiperRestApiPack.EF 
+```
+or if you need to use it with MongoDB
+```
+Install-Package HiperRestApiPack.Mongo
+```
 Run the test application and try following queries :
 
 http://localhost:5000/api/product?OrderBy=Id&page=4&pagesize=2&select=Name,Price
