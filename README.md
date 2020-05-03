@@ -54,4 +54,19 @@ http://localhost:5000/api/product?OrderBy=Id&Order=desc&page=2&pagesize=2
 }
 
 ```
+You can add [IgnoreField] attribute to the field to ignore return field in result permanently 
 
+```
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+
+        [IgnoreField]
+        public int SomeIgnoredField { get; set; }
+
+        public List<Variant> Variants { get; set; }
+
+    }
+```
