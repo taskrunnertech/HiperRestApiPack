@@ -10,19 +10,12 @@ namespace HiperRestApiPack.EF
 {
     public class FilteredEfQuery : IFilteredQuery
     {
-        public async Task<object> FirstOrDefault<TSource>(IQueryable<TSource> query, PagedRequest request)
+        public Task<object> FirstOrDefault<TSource>(IQueryable<TSource> query, PagedRequest request)
         {
-            if (!string.IsNullOrEmpty(request.Select))
-            {
-                var selectedFieldQuery = SelectDynamic(query, request.Select.Split(","));
-                var n = selectedFieldQuery.GetEnumerator();
-                n.MoveNext();
-                return n.Current;
-            }
-            else
-            {
-               return await query.FirstOrDefaultAsync();
-            }
+            var selectedFieldQuery = SelectDynamic(query, request.Select);
+            var n = selectedFieldQuery.GetEnumerator();
+            n.MoveNext();
+            return Task.FromResult(n.Current);
         }
 
         public async Task<Page> ToPageList<TSource>(IQueryable<TSource> query, PagedRequest request)
@@ -30,16 +23,10 @@ namespace HiperRestApiPack.EF
             var tempQuery = Order(query, request)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize);
-            if (!string.IsNullOrEmpty(request.Select))
-            {
-                var selectedFieldQuery = SelectDynamic(tempQuery, request.Select.Split(","));
-                return new Page(selectedFieldQuery, request.Page, request.PageSize, await query.CountAsync());
-            }
-            else
-            {
-                var result = await tempQuery.ToListAsync();
-                return new Page(result, request.Page, request.PageSize, await query.CountAsync());
-            }
+
+            var selectedFieldQuery = SelectDynamic(tempQuery, request.Select);
+
+            return new Page(selectedFieldQuery, request.Page, request.PageSize, await query.CountAsync());
         }
 
         public async Task<Page> ToPageList<TSource, TResult>(IQueryable<TSource> query, PagedRequest request, Func<TSource, TResult> mapper) where TResult : class, new()
@@ -49,8 +36,8 @@ namespace HiperRestApiPack.EF
               .Take(request.PageSize).ToListAsync();
             var result = history.Select(x => mapper(x)).ToList();
             return new Page(result, request.Page, request.PageSize, await query.CountAsync());
-        } 
-        
+        }
+
         public IQueryable<TSource> Order<TSource>(IQueryable<TSource> query, PagedRequest request)
         {
             if (string.IsNullOrEmpty(request.OrderBy))
@@ -61,19 +48,28 @@ namespace HiperRestApiPack.EF
             return query;
         }
 
-        public IQueryable SelectDynamic(IQueryable source, IEnumerable<string> fieldNames)
+        public IQueryable SelectDynamic(IQueryable source, string fieldNameList = null)
         {
-            Dictionary<string, PropertyInfo> sourceProperties = fieldNames.ToDictionary(name => name, name => source.ElementType.GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance));
-            //foreach (var prop in sourceProperties)
-            //{
-            //    var attr = prop.Value.GetCustomAttribute<IgnoreFieldAttribute>();
-            //    result.Add(new DataFieldProperty
-            //    {
-            //        Name = attr?.Name ?? prop.Name,
-            //        Ignore = attr?.Ignore ?? false,
-            //        Property = prop
-            //    });
-            //}
+            PropertyInfo[] props;
+            if (!string.IsNullOrWhiteSpace(fieldNameList))
+            {
+                var fieldNames = fieldNameList.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                props = fieldNames.Select(name => source.ElementType.GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)).ToArray();
+            }
+            else
+            {
+                props = source.ElementType.GetProperties(BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance).ToArray();
+            }
+            int n = props.Length;
+            Dictionary<string, PropertyInfo> sourceProperties = new Dictionary<string, PropertyInfo>();
+            for (int i = 0; i < n; i++)
+            {
+                var attr = props[i].GetCustomAttribute<IgnoreFieldAttribute>();
+                if (attr == null)
+                {
+                    sourceProperties[props[i].Name] = props[i];
+                }
+            }
             Type dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(sourceProperties.Values);
 
             ParameterExpression sourceItem = Expression.Parameter(source.ElementType, "t");
@@ -84,7 +80,9 @@ namespace HiperRestApiPack.EF
 
             return source.Provider.CreateQuery(Expression.Call(typeof(Queryable), "Select", new Type[] { source.ElementType, dynamicType },
                 source.Expression, Expression.Quote(selector)));
-                        
+
         }
+
+
     }
 }
