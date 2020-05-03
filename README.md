@@ -1,5 +1,6 @@
 # HiperRestApiPack
 Rest Api Helper, Select special fields, Paging
+This project provide a simple helper for you to add paging and custom field filtering to your .net core Web API
 
 # Install
 For using with entity framework
@@ -63,6 +64,7 @@ http://localhost:5000/api/product?OrderBy=Id&Order=desc&page=2&pagesize=2
 }
 
 ```
+# Ignore fileds
 You can add [IgnoreField] attribute to the field to ignore return field in result permanently 
 
 ```
@@ -79,3 +81,26 @@ You can add [IgnoreField] attribute to the field to ignore return field in resul
 
     }
 ```
+# Request Model
+To have a custom request parameters for get method crate a request model which inherit from PageRequest
+```
+    public class SampleResuest : PagedRequest
+    {
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+    }
+```
+PagedRequest Automatically provide some paramters for you get method
+```
+    public class PagedRequest
+    {
+        public string Select { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public OrderType Order { get; set; }
+        public string OrderBy { get; set; }
+        public string Search { get; set; }
+    }
+```
+
+
