@@ -63,7 +63,17 @@ namespace HiperRestApiPack.EF
 
         public IQueryable SelectDynamic(IQueryable source, IEnumerable<string> fieldNames)
         {
-            Dictionary<string, PropertyInfo> sourceProperties = fieldNames.ToDictionary(name => name, name => source.ElementType.GetProperty(name));
+            Dictionary<string, PropertyInfo> sourceProperties = fieldNames.ToDictionary(name => name, name => source.ElementType.GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance));
+            //foreach (var prop in sourceProperties)
+            //{
+            //    var attr = prop.Value.GetCustomAttribute<IgnoreFieldAttribute>();
+            //    result.Add(new DataFieldProperty
+            //    {
+            //        Name = attr?.Name ?? prop.Name,
+            //        Ignore = attr?.Ignore ?? false,
+            //        Property = prop
+            //    });
+            //}
             Type dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(sourceProperties.Values);
 
             ParameterExpression sourceItem = Expression.Parameter(source.ElementType, "t");
