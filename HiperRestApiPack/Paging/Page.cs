@@ -3,6 +3,15 @@ using System.Linq;
 
 namespace HiperRestApiPack
 {
+    public class ApiResponse
+    {
+        public object Data { get; set; }
+
+        public bool Success { get; set; } = true;
+        public int? ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
     public interface IPage
     {
         object Items { get; }
@@ -18,7 +27,7 @@ namespace HiperRestApiPack
         bool HasPreviousPage { get; }
 
         bool HasNextPage { get; }
-        decimal? Sum { get; }
+  
     }
 
     public class Page : IPage
@@ -44,6 +53,5 @@ namespace HiperRestApiPack
 
         public static IPage Empty => new Page(Enumerable.Empty<object>(), 0, 0, 0);
 
-        public decimal? Sum { get; }
     }
 }

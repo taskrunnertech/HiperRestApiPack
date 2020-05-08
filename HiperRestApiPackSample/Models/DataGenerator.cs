@@ -24,20 +24,80 @@ namespace HiperRestApiPackSample.Models
                         Id = 1,
                         Name = "Candy Land 1",
                         Price = 2.2m,
-
+                        Variants = new System.Collections.Generic.List<Variant>
+                        {
+                            new Variant
+                            {
+                                Id = 1,
+                                Description = "Variant 1",
+                                SusVariants = new System.Collections.Generic.List<SusVariant>
+                                {
+                                    new SusVariant
+                                    {
+                                        Id = 1,
+                                        Description= "Sub 1"
+                                    }
+                                }
+                            },
+                            new Variant
+                            {
+                                Id = 2,
+                                Description = "Variant 2"
+                            },
+                            new Variant
+                            {
+                                Id = 3,
+                                Description = "Variant 3"
+                            }
+                        }
                     },
                     new Product
                     {
                         Id = 2,
                         Name = "Candy Land 2",
                         Price = 8.2m,
-
+                        Variants = new System.Collections.Generic.List<Variant>
+                        {
+                            new Variant
+                            {
+                                Id = 4,
+                                Description = "Variant 4"
+                            },
+                            new Variant
+                            {
+                                Id = 5,
+                                Description = "Variant 5"
+                            },
+                            new Variant
+                            {
+                                Id = 6,
+                                Description = "Variant 6"
+                            }
+                        }
                     },
                     new Product
                     {
                         Id = 3,
                         Name = "Candy Land 3",
                         Price = 7.2m,
+                        Variants = new System.Collections.Generic.List<Variant>
+                        {
+                            new Variant
+                            {
+                                Id = 7,
+                                Description = "Variant 7"
+                            },
+                            new Variant
+                            {
+                                Id = 8,
+                                Description = "Variant 8"
+                            },
+                            new Variant
+                            {
+                                Id = 9,
+                                Description = "Variant 9"
+                            }
+                        }
 
                     },
                     new Product

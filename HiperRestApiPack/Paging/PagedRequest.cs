@@ -18,9 +18,14 @@ namespace HiperRestApiPack
     public class PagedRequest
     {
         /// <summary>
-        /// List of selected fields ( comma separated )
+        /// dynamic select new(Id as id, name)
         /// </summary>
         public string Select { get; set; }
+
+        /// <summary>
+        /// Sum query
+        /// </summary>
+        public string Sum { get; set; }
 
         /// <summary>
         /// Page to fetch

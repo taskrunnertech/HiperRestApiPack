@@ -22,6 +22,15 @@ namespace HiperRestApiPackSample.Models
         public string Description { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
+        public List<SusVariant> SusVariants { get; set; }
+    }
+
+    public class SusVariant
+    {
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public int VariantId { get; set; }
+        public Variant Variant { get; set; }
     }
 
     public class Order
