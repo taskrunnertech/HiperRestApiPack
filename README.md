@@ -102,5 +102,45 @@ PagedRequest Automatically provide some paramters for you get method
         public string Search { get; set; }
     }
 ```
+No in version 2.0 we use dynamic linq and you can use these queries
 
+http://localhost:5000/api/product?select=new (id as id, name as name, Variants.Select(new (Id,Description)) as variants)
+
+http://localhost:5000/api/product?select=new (id, name, variants.Select(new (id,description)) as variants)
+
+http://localhost:5000/api/product?select=new (id , name, variants.Select(new (id,description)) as vars, variants.count() as count)
+
+http://localhost:5000/api/product?select=new (id , name, variants.Count() as count)
+
+http://localhost:5000/api/product?sum=price
+
+http://localhost:5000/api/product/1?select=new(Id as id,name as name)
+we have previous response and new response if you need:
+```
+{
+  "data": {
+    "items": [
+      {
+        "Id": 1,
+        "Name": "Candy Land 1",
+        "variantCount": 3
+      },
+      {
+        "Id": 2,
+        "Name": "Candy Land 2",
+        "variantCount": 3
+      }
+    ],
+    "index": 1,
+    "size": 10,
+    "totalCount": 7,
+    "totalPages": 1,
+    "hasPreviousPage": false,
+    "hasNextPage": false
+  },
+  "success": true,
+  "errorCode": null,
+  "message": null
+}
+```
 
