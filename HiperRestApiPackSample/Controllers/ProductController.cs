@@ -25,7 +25,7 @@ namespace HiperRestApiPack.Controllers
         public async Task<IActionResult> GetAsync([FromQuery]SampleResuest request)
         {
             var query = _context.Products.Include(p => p.Variants).ThenInclude(v=>v.SusVariants);
-            var result = await _filteredQuery.ToApiResult(query, request);
+            var result = await _filteredQuery.ToPageList(query, request, "new(id,name,price,variants.Select(new (id,description)) as variants)");
             return Ok(result);
         }
 

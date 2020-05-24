@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +20,13 @@ namespace HiperRestApiPack.EF
             return CreatedResult(result);
         }
 
-        public async Task<ApiResponse> ToApiResult<TSource>(IQueryable<TSource> query, PagedRequest request)
+        public async Task<ApiResponse> ToApiResult<TSource>(IQueryable<TSource> query, PagedRequest request, string filterSelect = null)
         {
             if (!string.IsNullOrWhiteSpace(request.Sum))
             {
                 return CreatedResult(query.Sum(request.Sum));
             }
-            var page = await ToPageList(query, request);
+            var page = await ToPageList(query, request, filterSelect);
             return CreatedResult(page);
         }
 
@@ -42,13 +41,15 @@ namespace HiperRestApiPack.EF
         }
 
 
-        public async Task<Page> ToPageList<TSource>(IQueryable<TSource> query, PagedRequest request)
+        public async Task<Page> ToPageList<TSource>(IQueryable<TSource> query, PagedRequest request, string filterSelect = null)
         {
-            var tempQuery = Order(query, request)
+            IQueryable tempQuery = Order(query, request)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize);
 
-            var selectedFieldQuery = SelectDynamic(tempQuery, request.Select);
+
+            var selectedFieldQuery = SelectDynamic(tempQuery, request.Select, filterSelect);
+
             var result = SomeDynamic(selectedFieldQuery, request);
             var page = new Page(result, request.Page, request.PageSize, await query.CountAsync());
             return page;
@@ -92,34 +93,44 @@ namespace HiperRestApiPack.EF
             return source;
         }
 
-        public IQueryable SelectDynamic(IQueryable source, string select = null)
+        public IQueryable SelectDynamic(IQueryable source, string select = null, string filterSelect = null)
         {
+            bool hasFilterSelect = false;
+            if (!string.IsNullOrEmpty(filterSelect))
+            {
+                source = source.Select(filterSelect);
+                hasFilterSelect = true;
+            }
+
             if (!string.IsNullOrWhiteSpace(select))
             {
                 return source.Select(select);
             }
-
-            PropertyInfo[] props = source.ElementType.GetProperties(BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance).ToArray();
-            int n = props.Length;
-            Dictionary<string, PropertyInfo> sourceProperties = new Dictionary<string, PropertyInfo>();
-            for (int i = 0; i < n; i++)
+            if (!hasFilterSelect)
             {
-                var attr = props[i].GetCustomAttribute<IgnoreFieldAttribute>();
-                if (attr == null)
+                PropertyInfo[] props = source.ElementType.GetProperties(BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance).ToArray();
+                int n = props.Length;
+                Dictionary<string, PropertyInfo> sourceProperties = new Dictionary<string, PropertyInfo>();
+                for (int i = 0; i < n; i++)
                 {
-                    sourceProperties[props[i].Name] = props[i];
+                    var attr = props[i].GetCustomAttribute<IgnoreFieldAttribute>();
+                    if (attr == null)
+                    {
+                        sourceProperties[props[i].Name] = props[i];
+                    }
                 }
+                Type dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(sourceProperties.Values);
+
+                ParameterExpression sourceItem = Expression.Parameter(source.ElementType, "t");
+                IEnumerable<MemberBinding> bindings = dynamicType.GetFields().Select(p => Expression.Bind(p, Expression.Property(sourceItem, sourceProperties[p.Name]))).OfType<MemberBinding>();
+
+                Expression selector = Expression.Lambda(Expression.MemberInit(
+                    Expression.New(dynamicType.GetConstructor(Type.EmptyTypes)), bindings), sourceItem);
+
+                return source.Provider.CreateQuery(Expression.Call(typeof(Queryable), "Select", new Type[] { source.ElementType, dynamicType },
+                    source.Expression, Expression.Quote(selector)));
             }
-            Type dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(sourceProperties.Values);
-
-            ParameterExpression sourceItem = Expression.Parameter(source.ElementType, "t");
-            IEnumerable<MemberBinding> bindings = dynamicType.GetFields().Select(p => Expression.Bind(p, Expression.Property(sourceItem, sourceProperties[p.Name]))).OfType<MemberBinding>();
-
-            Expression selector = Expression.Lambda(Expression.MemberInit(
-                Expression.New(dynamicType.GetConstructor(Type.EmptyTypes)), bindings), sourceItem);
-
-            return source.Provider.CreateQuery(Expression.Call(typeof(Queryable), "Select", new Type[] { source.ElementType, dynamicType },
-                source.Expression, Expression.Quote(selector)));
+            return source;
         }
 
 
