@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Farshid Mirza</Authors>
+    <Company>Task Runner Technology</Company>
+    <PackageProjectUrl>http://taskrunnertech.co.uk</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/taskrunnertech/HiperRestApiPack</RepositoryUrl>
+    <Description>Rest Api Helper, Select special fields and Paging Extension for Entity Framework</Description>
+    <Version>2.2.2</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="HiperRestApiPack" Version="2.2.2" />
+
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <ProjectReference Include="..\HiperRestApiPack\HiperRestApiPack.csproj" />
+  </ItemGroup>-->
+
+</Project>

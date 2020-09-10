@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiperRestApiPack.Mongo", "H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiperRestApiPack.EF", "HiperRestApiPack.EF\HiperRestApiPack.EF.csproj", "{FD8B856C-9314-47B3-A5AC-A1B7156F281E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiperRestApiPackSample", "HiperRestApiPackSample\HiperRestApiPackSample.csproj", "{7F240087-FBC1-4669-95D2-08D3840AF10F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiperRestApiPackSample", "HiperRestApiPackSample\HiperRestApiPackSample.csproj", "{7F240087-FBC1-4669-95D2-08D3840AF10F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiperRestApiPack.MySql", "HiperRestApiPack.MySql\HiperRestApiPack.MySql.csproj", "{EEE82E74-884F-4881-8294-AAA4B504CEE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{7F240087-FBC1-4669-95D2-08D3840AF10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F240087-FBC1-4669-95D2-08D3840AF10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F240087-FBC1-4669-95D2-08D3840AF10F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE82E74-884F-4881-8294-AAA4B504CEE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE82E74-884F-4881-8294-AAA4B504CEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE82E74-884F-4881-8294-AAA4B504CEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE82E74-884F-4881-8294-AAA4B504CEE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
