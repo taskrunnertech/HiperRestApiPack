@@ -1,13 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using HiperRestApiPack.Mongo;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace HiperRestApiPack.Mongo
+namespace HiperRestApiPack
 {
     public static class ApiPackExtensions
     {
-        public static IServiceCollection AddHiperApiPack(this IServiceCollection services)
+        public static IServiceCollection AddHiperApiPackMongo(this IServiceCollection services)
         {
             services.AddTransient<IFilteredQuery, FilteredMongoQuery>();
             return services;

@@ -53,7 +53,7 @@ namespace HiperRestApiPack
 
                 return builtTypes[className];
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // log.Error(ex);
             }

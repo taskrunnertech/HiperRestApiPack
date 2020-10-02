@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace HiperRestApiPack.EF
@@ -95,41 +92,16 @@ namespace HiperRestApiPack.EF
 
         public IQueryable SelectDynamic(IQueryable source, string select = null, string filterSelect = null)
         {
-            bool hasFilterSelect = false;
             if (!string.IsNullOrEmpty(filterSelect))
             {
                 source = source.Select(filterSelect);
-                hasFilterSelect = true;
             }
 
             if (!string.IsNullOrWhiteSpace(select))
             {
                 return source.Select(select);
             }
-            if (!hasFilterSelect)
-            {
-                PropertyInfo[] props = source.ElementType.GetProperties(BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance).ToArray();
-                int n = props.Length;
-                Dictionary<string, PropertyInfo> sourceProperties = new Dictionary<string, PropertyInfo>();
-                for (int i = 0; i < n; i++)
-                {
-                    var attr = props[i].GetCustomAttribute<IgnoreFieldAttribute>();
-                    if (attr == null)
-                    {
-                        sourceProperties[props[i].Name] = props[i];
-                    }
-                }
-                Type dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(sourceProperties.Values);
 
-                ParameterExpression sourceItem = Expression.Parameter(source.ElementType, "t");
-                IEnumerable<MemberBinding> bindings = dynamicType.GetFields().Select(p => Expression.Bind(p, Expression.Property(sourceItem, sourceProperties[p.Name]))).OfType<MemberBinding>();
-
-                Expression selector = Expression.Lambda(Expression.MemberInit(
-                    Expression.New(dynamicType.GetConstructor(Type.EmptyTypes)), bindings), sourceItem);
-
-                return source.Provider.CreateQuery(Expression.Call(typeof(Queryable), "Select", new Type[] { source.ElementType, dynamicType },
-                    source.Expression, Expression.Quote(selector)));
-            }
             return source;
         }
 

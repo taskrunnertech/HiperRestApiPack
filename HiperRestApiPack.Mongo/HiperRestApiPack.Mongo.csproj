@@ -7,12 +7,12 @@
     <PackageProjectUrl>http://taskrunnertech.co.uk</PackageProjectUrl>
     <RepositoryUrl>https://github.com/taskrunnertech/HiperRestApiPack</RepositoryUrl>
     <Description>Rest Api Helper, Select special fields and Paging Extension for mongoDb</Description>
-    <Version>1.1.1</Version>
+    <Version>2.2.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HiperRestApiPack" Version="1.1.1" />
-    <PackageReference Include="MongoDB.Driver" Version="2.10.1" />
+    <PackageReference Include="HiperRestApiPack" Version="2.2.3" />
+    <PackageReference Include="MongoDB.Driver" Version="2.11.2" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 

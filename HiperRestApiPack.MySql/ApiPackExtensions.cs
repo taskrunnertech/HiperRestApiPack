@@ -1,11 +1,11 @@
 ﻿using HiperRestApiPack.EF;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HiperRestApiPack.Mongo
+namespace HiperRestApiPack
 {
     public static class ApiPackExtensions
     {
-        public static IServiceCollection AddHiperApiPack(this IServiceCollection services)
+        public static IServiceCollection AddHiperApiPackMysql(this IServiceCollection services)
         {
             services.AddTransient<IFilteredQuery, FilteredEfQuery>();
             return services;

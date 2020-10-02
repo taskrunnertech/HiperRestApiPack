@@ -10,7 +10,6 @@ namespace HiperRestApiPackSample.Models
         public string Name { get; set; }
         public decimal Price { get; set; }
 
-        [IgnoreField]
         public int SomeIgnoredField { get; set; }
 
         public List<Variant> Variants { get; set; }
