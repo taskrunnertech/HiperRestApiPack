@@ -20,6 +20,5 @@ namespace HiperRestApiPack
             Func<TSource, TResult> mapper) where TResult : class, new();
 
         IQueryable<TSource> Order<TSource>(IQueryable<TSource> query, PagedRequest request);
-
     }
 }

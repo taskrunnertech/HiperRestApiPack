@@ -15,6 +15,7 @@ namespace HiperRestApiPack
         /// </summary>
         Desc
     }
+
     public class PagedRequest
     {
         /// <summary>
@@ -34,7 +35,7 @@ namespace HiperRestApiPack
 
         /// <summary>
         /// Size of page to fetch
-        /// Default is 20
+        /// Default is 10
         /// </summary>
         public int PageSize { get; set; } = 10;
 
