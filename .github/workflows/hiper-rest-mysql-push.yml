@@ -3,7 +3,7 @@ name: Push to nuget EF
 on:
   push:
     branches: 
-    - 'release/rest-ef-**'
+    - 'release/rest-mysql-**'
 
 jobs:
   publish:
