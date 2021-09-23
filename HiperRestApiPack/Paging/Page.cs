@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HiperRestApiPack
@@ -8,7 +9,9 @@ namespace HiperRestApiPack
         public object Data { get; set; }
 
         public bool Success { get; set; } = true;
+
         public int? ErrorCode { get; set; }
+
         public string Message { get; set; }
     }
 
@@ -27,20 +30,30 @@ namespace HiperRestApiPack
         bool HasPreviousPage { get; }
 
         bool HasNextPage { get; }
-  
     }
 
     public class Page : IPage
     {
         public Page(object items, int pageIndex, int pageSize, int totalItemCount)
         {
-            this.Items = items;
-            this.Index = pageIndex;
-            this.Size = pageSize;
-            this.TotalCount = totalItemCount;
-            this.TotalPages = (totalItemCount / pageSize) + 1;
-            this.HasNextPage = pageIndex < this.TotalPages;
-            this.HasPreviousPage = pageIndex > 1;
+            if(pageSize <= 0) {
+                throw new ArgumentOutOfRangeException(nameof(pageSize));
+            }
+            if(totalItemCount < 0) {
+                throw new ArgumentOutOfRangeException(nameof(totalItemCount));
+            }
+
+            Items = items;
+            Index = pageIndex;
+            Size = pageSize;
+            TotalCount = totalItemCount;
+            TotalPages = (int)Math.Ceiling(totalItemCount / (double)pageSize);
+            HasNextPage = pageIndex < TotalPages;
+            HasPreviousPage = pageIndex > 1;
+
+            if (pageIndex <= 0 || pageIndex > TotalPages) {
+                throw new ArgumentOutOfRangeException(nameof(pageIndex));
+            }
         }
 
         public object Items { get; }
@@ -52,6 +65,5 @@ namespace HiperRestApiPack
         public bool HasNextPage { get; }
 
         public static IPage Empty => new Page(Enumerable.Empty<object>(), 0, 0, 0);
-
     }
 }
