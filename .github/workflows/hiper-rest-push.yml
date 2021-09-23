@@ -5,7 +5,7 @@ name: Push to nuget
 on:
   push:
     branches: 
-    - 'releases/rest/**'
+    - 'releases/rest-**'
 
 jobs:
   publish:
