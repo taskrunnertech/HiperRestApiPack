@@ -4,7 +4,7 @@ name: Push to nuget
 
 on:
   push:
-    branches: [ releae/rest/* ]
+    branches: [ releae/rest/** ]
 
 jobs:
   publish:
