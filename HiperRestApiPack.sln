@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiperRestApiPackSample", "H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiperRestApiPack.MySql", "HiperRestApiPack.MySql\HiperRestApiPack.MySql.csproj", "{EEE82E74-884F-4881-8294-AAA4B504CEE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiperRestApiPack.Tests", "HiperRestApiPack.Tests\HiperRestApiPack.Tests.csproj", "{11FBFFBB-27D3-4258-9402-F154B51962BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiperRestApiPack.Tests", "HiperRestApiPack.Tests\HiperRestApiPack.Tests.csproj", "{11FBFFBB-27D3-4258-9402-F154B51962BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
