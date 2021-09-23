@@ -1,4 +1,4 @@
-name: Push to nuget EF
+name: Push to nuget My Sql
 
 on:
   push:
