@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HiperRestApiPack.MySql\HiperRestApiPack.MySql.csproj" />
+    <ProjectReference Include="..\HiperRestApiPack.EF\HiperRestApiPack.EF.csproj" />
   </ItemGroup>
   
 </Project>

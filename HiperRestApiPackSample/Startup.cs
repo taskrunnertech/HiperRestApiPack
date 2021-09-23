@@ -24,7 +24,7 @@ namespace HiperRestApiPackSample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddHiperApiPack();
+            services.AddHiperApiPackEf();
             services.AddMvc(option => option.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
