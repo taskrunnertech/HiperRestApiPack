@@ -7,12 +7,12 @@
     <PackageProjectUrl>http://taskrunnertech.co.uk</PackageProjectUrl>
     <RepositoryUrl>https://github.com/taskrunnertech/HiperRestApiPack</RepositoryUrl>
     <Description>Rest Api Helper, Select special fields and Paging Extension for Entity Framework</Description>
-    <Version>2.2.3</Version>
+    <Version>3.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
 
-    <PackageReference Include="HiperRestApiPack" Version="2.2.3" />
+    <PackageReference Include="HiperRestApiPack" Version="3.0.0" />
 
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.1" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
