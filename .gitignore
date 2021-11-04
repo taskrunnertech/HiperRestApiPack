@@ -167,6 +167,7 @@ $RECYCLE.BIN/
 /.vs/VSWorkspaceState.json
 /.vs/slnx.sqlite
 /.vs
+/.vscode
 node_modules
 
 # Dotnet Core MVC custome filter

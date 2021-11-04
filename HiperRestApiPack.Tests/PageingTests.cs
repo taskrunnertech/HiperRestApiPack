@@ -8,6 +8,13 @@ namespace HiperRestApiPack.Tests
     {
 
         [Fact]
+        public void TestIndex_EmptyList_TotalPageZero()
+        {
+            var page = new Page(null, 1, 10, 0);
+            Assert.Equal(0, page.TotalPages);
+        }
+
+        [Fact]
         public void TestIndex_TotalPageCalculation_TotalPage()
         {
             var page = new Page(null, 1, 10, 100);

@@ -47,11 +47,15 @@ namespace HiperRestApiPack
             Index = pageIndex;
             Size = pageSize;
             TotalCount = totalItemCount;
-            TotalPages = (int)Math.Ceiling(totalItemCount / (double)pageSize);
+            TotalPages =  (totalItemCount + pageSize - 1) / pageSize; //(int)Math.Ceiling(totalItemCount / (double)pageSize);
             HasNextPage = pageIndex < TotalPages;
             HasPreviousPage = pageIndex > 1;
 
-            if (pageIndex <= 0 || pageIndex > TotalPages) {
+            if (totalItemCount == 0)
+            {
+                TotalPages = 0;
+            }
+            else if (pageIndex <= 0 || pageIndex > TotalPages) {
                 throw new ArgumentOutOfRangeException(nameof(pageIndex));
             }
         }
