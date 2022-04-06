@@ -40,10 +40,14 @@ namespace HiperRestApiPack.EF
 
         public async Task<Page> ToPageList<TSource>(IQueryable<TSource> query, PagedRequest request, string filterSelect = null)
         {
+            if (query == null)
+            {
+                return new Page(Enumerable.Empty<TSource>(), 1, request.PageSize, 0);
+            }
+
             IQueryable tempQuery = Order(query, request)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize);
-
 
             var selectedFieldQuery = SelectDynamic(tempQuery, request.Select, filterSelect);
 
@@ -63,6 +67,11 @@ namespace HiperRestApiPack.EF
 
         public async Task<Page> ToPageList<TSource, TResult>(IQueryable<TSource> query, PagedRequest request, Func<TSource, TResult> mapper) where TResult : class, new()
         {
+            if (query == null)
+            {
+                return new Page(Enumerable.Empty<TResult>(), 1, request.PageSize, 0);
+            }
+
             var history = await Order(query, request)
               .Skip((request.Page - 1) * request.PageSize)
               .Take(request.PageSize).ToListAsync();

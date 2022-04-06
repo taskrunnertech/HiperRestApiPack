@@ -8,6 +8,15 @@ namespace HiperRestApiPack.EF
 {
     public class FilteredEfQuery : IFilteredQuery
     {
+        private ApiResponse CreatedResult(object data)
+        {
+            return new ApiResponse
+            {
+                Data = data,
+                Success = true
+            };
+        }
+
         public async Task<ApiResponse> FirstOrDefault<TSource>(IQueryable<TSource> query, PagedRequest request)
         {
             var selectedFieldQuery = SelectDynamic(query, request.Select);
@@ -37,36 +46,37 @@ namespace HiperRestApiPack.EF
             return CreatedResult(page);
         }
 
-
         public async Task<Page> ToPageList<TSource>(IQueryable<TSource> query, PagedRequest request, string filterSelect = null)
         {
-            IQueryable tempQuery = Order(query, request)
+            if(query == null)
+            {
+                return new Page(Enumerable.Empty<TSource>(), 1, request.PageSize, 0);
+            }
+
+            IQueryable pagedQuery = Order(query, request)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize);
 
-
-            var selectedFieldQuery = SelectDynamic(tempQuery, request.Select, filterSelect);
+            var selectedFieldQuery = SelectDynamic(pagedQuery, request.Select, filterSelect);
 
             var result = SomeDynamic(selectedFieldQuery, request);
-            var page = new Page(result, request.Page, request.PageSize, await query.CountAsync());
-            return page;
-        }
-
-        private ApiResponse CreatedResult(object data)
-        {
-            return new ApiResponse
-            {
-                Data = data,
-                Success = true
-            };
+            
+            return new Page(result, request.Page, request.PageSize, await query.CountAsync());
         }
 
         public async Task<Page> ToPageList<TSource, TResult>(IQueryable<TSource> query, PagedRequest request, Func<TSource, TResult> mapper) where TResult : class, new()
         {
+            if (query == null)
+            {
+                return new Page(Enumerable.Empty<TResult>(), 1, request.PageSize, 0);
+            }
+
             var history = await Order(query, request)
               .Skip((request.Page - 1) * request.PageSize)
               .Take(request.PageSize).ToListAsync();
+
             var result = history.Select(x => mapper(x)).ToList();
+            
             return new Page(result, request.Page, request.PageSize, await query.CountAsync());
         }
 
@@ -79,7 +89,6 @@ namespace HiperRestApiPack.EF
             string orderDircetion = request.Order == OrderType.Desc ? "descending" : string.Empty;
             return query.OrderBy($"{request.OrderBy} {orderDircetion}");
         }
-
 
         public object SomeDynamic(IQueryable source, PagedRequest request)
         {
@@ -104,7 +113,5 @@ namespace HiperRestApiPack.EF
 
             return source;
         }
-
     }
-
 }
