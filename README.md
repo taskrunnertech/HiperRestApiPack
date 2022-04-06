@@ -64,7 +64,7 @@ http://localhost:5000/api/product?OrderBy=Id&Order=desc&page=2&pagesize=2
 }
 
 ```
-# Ignore fileds
+# Ignore fields
 You can add [IgnoreField] attribute to the field to ignore return field in result permanently 
 
 ```
