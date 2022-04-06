@@ -38,9 +38,12 @@ namespace HiperRestApiPack.Mongo
             return CreatedResult(page);
         }
 
-
         public async Task<Page> ToPageList<TSource>(IQueryable<TSource> query, PagedRequest request, string filterSelect = null)
         {
+            if (query == null)
+            {
+                return new Page(Enumerable.Empty<TSource>(), 1, request.PageSize, 0);
+            }
 
             IMongoQueryable<TSource> q = query as IMongoQueryable<TSource>;
 
@@ -58,10 +61,15 @@ namespace HiperRestApiPack.Mongo
 
         public async Task<Page> ToPageList<TSource, TResult>(IQueryable<TSource> query, PagedRequest request, Func<TSource, TResult> mapper) where TResult : class, new()
         {
+            if (query == null)
+            {
+                return new Page(Enumerable.Empty<TResult>(), 1, request.PageSize, 0);
+            }
+
             IMongoQueryable<TSource> q = query as IMongoQueryable<TSource>;
             var history = await (Order(q, request) as IMongoQueryable<TSource>)
-              .Skip((request.Page - 1) * request.PageSize)
-              .Take(request.PageSize).ToListAsync();
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize).ToListAsync();
             var result = history.Select(x => mapper(x)).ToList();
             return new Page(result, request.Page, request.PageSize, await q.CountAsync());
         }
@@ -75,7 +83,6 @@ namespace HiperRestApiPack.Mongo
             query = query.OrderBy(request.OrderBy, request.Order == OrderType.Asc);
             return query;
         }
-
 
         private ApiResponse CreatedResult(object data)
         {
