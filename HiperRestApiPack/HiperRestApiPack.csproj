@@ -6,7 +6,7 @@
 		<PackageProjectUrl>http://taskrunnertech.co.uk</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/taskrunnertech/HiperRestApiPack</RepositoryUrl>
 		<Description>Rest Api Helper, Select special fields and Paging</Description>
-		<Version>3.0.1</Version>
+		<Version>3.0.2</Version>
 		<Copyright/>
 	</PropertyGroup>
 	<ItemGroup>
