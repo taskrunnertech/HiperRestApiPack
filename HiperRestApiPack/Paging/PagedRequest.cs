@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace HiperRestApiPack
 {
-    public enum OrderType
+    public enum OrderType : int
     {
         /// <summary>
         /// Ascending sort
         /// </summary>
-        Asc,
+        Asc = 0,
 
         /// <summary>
         /// Descending sort
         /// </summary>
-        Desc
+        Desc = 1,
     }
 
     public class PagedRequest
@@ -39,7 +38,7 @@ namespace HiperRestApiPack
         /// </summary>
         public int PageSize { get; set; } = 10;
 
-        public OrderType Order { get; set; } = OrderType.Asc;
+        public OrderType? Order { get; set; }
 
         /// <summary>
         /// Field name to sort   
