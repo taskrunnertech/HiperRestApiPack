@@ -10,7 +10,7 @@
 		<Copyright/>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.13"/>
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.0"/>
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="Sort\**"/>
